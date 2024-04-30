@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy JAR app to Azure Web App - benezinho-pizzaria
+name: Build and deploy JAR app to Azure App Service - benezinho-pizzaria
 
 on:
   push:
@@ -36,9 +33,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-  
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
@@ -48,15 +43,11 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F08227F694294FBD92975E5243ECED76 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_82A3F1B99B944F909FEDB486E76A7E13 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AC484877960E4B53B461A80536937E3D }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure App Service
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'benezinho-pizzaria'
-          slot-name: 'Production'
           package: '*.jar'
-          
